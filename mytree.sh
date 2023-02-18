@@ -2,19 +2,30 @@
 
 function mytree()
 {
-local t=$2
+local t1="|  "
+local t2="$2"
 for i in "$1"/*
 do
-	printf "%*s" $((t*4))
-	if [ -f "$i"  ]
+	if [[ -f "$i" ]]
 	then	
-		echo -e "$t2" `basename "$i"`
-	elif [ -d "$i" ]
+		files_count=$((files_count+1))
+		if [[ -x "$i" ]]
+		then
+			echo -e "$2" "\033[32m$(basename "$i")\033[0m"
+		else
+			echo "$2" $(basename "$i")
+		fi
+	elif [[ -d "$i" ]]
 	then
-		echo -e "$t2" `basename "$i"`
-		mytree "$i" $((t+1))
+		directories_count=$((directories_count+1))
+		echo -e "$2" "\033[34m$(basename "$i")\033[0m"
+		mytree "$i" "$t1$t2"
 	fi
 done
 }
 
-mytree "$PWD" 0
+directories_count=0
+files_count=0
+echo -e "\033[34m$(basename "$PWD")\033[0m"
+mytree "$PWD" "|__"
+echo -e "\n$directories_count directories, $files_count files" 

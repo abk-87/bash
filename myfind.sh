@@ -2,27 +2,26 @@
 
 function myfind()
 {
-	dir="$1"
-	file="$2"
-	if [ -e "$dir"/"$file" ]
-	then
-		echo "$dir"/"$file"
-	fi
-	
+	local dir="$1"
 	for i in "$dir"/*
 	do
-		if [ -d "$i" ]
+		
+		if [[ "$i" == "$dir"/$2 ]]
+		then	
+			echo "$i"
+		fi
+
+		if [[ -d "$i" ]]
 		then
-			myfind "$i" "$file"
+			myfind "$i" "$2"
 		fi
 	done
 }
 
-
-if [ -d "$1" -a "$2" == -name ]
+if [[ -d "$1" && "$2" == -name ]]
 then
 	myfind "$1" "$3"
-elif [ "$1" = -name ]
+elif [[ "$1" == -name ]]
 then
 	myfind . "$2"
 fi
